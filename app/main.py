@@ -1,19 +1,21 @@
-import uvicorn
+import os
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from app.database import engine, Base
 from app.routes import router
 
-# إنشاء الجداول في قاعدة البيانات تلقائياً
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Secure AI Inspection Platform",
-    description="Backend API foundation for AI processing, security validation, and cloud deployment",
+    title="Secure AI-Powered Automated Visual Inspection System",
+    description="Enterprise API with Deep Learning, NLP Auditing, and Security Hardening",
     version="1.0.0"
 )
 
-app.include_router(router)
+@app.get("/", response_class=HTMLResponse, tags=["Dashboard"])
+def serve_dashboard():
+    template_path = os.path.join("app", "templates", "index.html")
+    with open(template_path, "r", encoding="utf-8") as f:
+        return f.read()
 
-# كود التشغيل المباشر
-if __name__ == "__main__":
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
+app.include_router(router)

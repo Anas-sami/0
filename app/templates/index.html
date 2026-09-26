@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure AI Inspection Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+    <!-- Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="p-2 bg-indigo-600 rounded-lg text-white">
+                <i class="fa-solid fa-shield-halved text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-white tracking-wide">SecureAI Platform</h1>
+                <p class="text-xs text-slate-400">Intelligent Quality Inspection & Audit</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span class="w-2 h-2 mr-2 bg-emerald-500 rounded-full animate-ping"></span>
+                Engine Online
+            </span>
+            <a href="/docs" target="_blank" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-md border border-slate-700 transition">
+                <i class="fa-solid fa-code mr-1"></i> Swagger API
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Left: Upload Form -->
+        <div class="lg:col-span-5 space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+                <h2 class="text-base font-semibold text-white mb-4 flex items-center">
+                    <i class="fa-solid fa-cloud-arrow-up text-indigo-400 mr-2"></i> Submit Inspection Task
+                </h2>
+                <form id="uploadForm" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Component / Batch Title</label>
+                        <input type="text" id="title" required placeholder="e.g. Turbine Blade Sector 4"
+                               class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Inspector Field Notes</label>
+                        <textarea id="notes" rows="3" placeholder="Enter manual inspection remarks or defects noticed..."
+                                  class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Image Specimen</label>
+                        <input type="file" id="file" accept="image/*" required
+                               class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 bg-slate-950 border border-slate-800 rounded-lg p-2 cursor-pointer">
+                    </div>
+                    <button type="submit" id="submitBtn"
+                            class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition flex items-center justify-center space-x-2">
+                        <span>Analyze & Generate Audit</span>
+                        <i class="fa-solid fa-bolt"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right: Real-time Analysis Card -->
+        <div class="lg:col-span-7 space-y-6">
+            <div id="resultCard" class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl hidden">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+                    <div>
+                        <span id="resBadge" class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider"></span>
+                        <h3 id="resTitle" class="text-lg font-bold text-white mt-1"></h3>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-400 block">AI Confidence</span>
+                        <span id="resConfidence" class="text-lg font-mono font-bold text-indigo-400"></span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Computer Vision Detection</h4>
+                        <div id="resSummary" class="bg-slate-950 p-3 rounded-lg text-sm text-slate-200 border border-slate-800 font-mono"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Executive Audit Report</h4>
+                        <div id="resReport" class="bg-slate-950 p-4 rounded-lg text-sm text-slate-300 border border-slate-800 leading-relaxed whitespace-pre-line"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Placeholder state -->
+            <div id="emptyCard" class="bg-slate-900/50 border border-dashed border-slate-800 rounded-xl p-12 text-center text-slate-500">
+                <i class="fa-solid fa-microscope text-4xl mb-3 text-slate-600"></i>
+                <p class="text-sm font-medium">Ready to process specimens.</p>
+                <p class="text-xs text-slate-600 mt-1">Upload an image on the left to trigger the Vision + NLP evaluation pipeline.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultCard = document.getElementById('resultCard');
+        const emptyCard = document.getElementById('emptyCard');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> <span>Processing with AI Engine...</span>';
+
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('notes', document.getElementById('notes').value);
+            formData.append('file', document.getElementById('file').files[0]);
+
+            try {
+                const response = await fetch('/inspections/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.detail || 'Inspection failed');
+
+                emptyCard.classList.add('hidden');
+                resultCard.classList.remove('hidden');
+
+                document.getElementById('resTitle').innerText = data.title;
+                document.getElementById('resSummary').innerText = data.ai_summary;
+                document.getElementById('resReport').innerText = data.detailed_report;
+                document.getElementById('resConfidence').innerText = (data.confidence_score * 100).toFixed(1) + '%';
+
+                const badge = document.getElementById('resBadge');
+                badge.innerText = data.severity;
+                if (data.severity === 'CRITICAL' || data.severity === 'HIGH') {
+                    badge.className = "px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30";
+                } else if (data.severity === 'MEDIUM') {
+                    badge.className = "px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                } else {
+                    badge.className = "px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                }
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Analyze & Generate Audit</span> <i class="fa-solid fa-bolt"></i>';
+            }
+        });
+    </script>
+</body>
+</html>

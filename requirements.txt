@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+python-multipart
+ultralytics
+opencv-python-headless
+transformers
+torch
+pyjwt
