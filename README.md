@@ -9,15 +9,23 @@
 
 A production-grade, containerized automated visual inspection platform integrating a **Deep Learning Vision Engine (YOLOv8)** with an **Automated NLP Audit Reporting Pipeline**. Engineered with **DevSecOps best practices**, fully containerized using **Docker on Linux**, and served through an enterprise **Modern Dark Dashboard**.
 
----## 📸 Platform Showcase
+---
+
+## 📸 Platform Showcase
 
 | Real-time AI Inspection & NLP Audit | Interactive Swagger / OpenAPI Specification |
-|:---:|:---:|
-| <img src="docs/assets/inspection-result.png" alt="AI Inspection Pipeline" width="100%"/> | <img src="docs/assets/swagger-docs.png" alt="Swagger Docs" width="100%"/> |*Enterprise Tailwind CSS dashboard rendering live Computer Vision detection telemetry, automated Arabic audit summaries, and operational severity grading.*
+| :---: | :---: |
+| <img src="docs/assets/inspection-result.png" alt="AI Inspection Pipeline" width="100%"/> | <img src="docs/assets/swagger-docs.png" alt="Swagger Docs" width="100%"/> |
 
----## 🏛️ System Architecture
+*Enterprise Tailwind CSS dashboard rendering live Computer Vision detection telemetry, automated Arabic audit summaries, and operational severity grading.*
 
-The following diagram illustrates the complete data lifecycle, request flow, and security validation layers:```mermaid
+---
+
+## 🏛️ System Architecture
+
+The following diagram illustrates the complete data lifecycle, request flow, and security validation layers:
+
+```mermaid
 graph TD
     Client([Client / Inspector UI]) -->|HTTP / Form Data| Gateway[FastAPI Application Gateway]
     
@@ -38,27 +46,30 @@ graph TD
         Audit -->|JSON Telemetry| Gateway
         Gateway -->|Real-Time Dashboard Update| Client
     end
-⚡ Key Technical Highlights
-1. 🧠 Dual-Core AI Pipeline
-Computer Vision (YOLOv8n + OpenCV): Deep learning inference optimized for zero-defect quality inspection. Detects objects, anomalies, and structural defects with granular confidence scoring.
+```
 
-NLP & Automated Audit Logic: Synthesizes inspector field notes and computer vision findings into an executive audit report in Arabic with automated risk classification (CRITICAL, HIGH, MEDIUM, NORMAL).
+---
 
-2. 🛡️ Security & DevSecOps Hardening
-Input Sanitization & Buffer Defense: Strict file type validation (.jpg, .png, .webp) and buffer length restrictions (10 MB threshold) preventing denial-of-service (DoS) and binary payload injection.
+## ⚡ Key Technical Highlights
 
-Cryptographic Protection: Salted PBKDF2-HMAC-SHA256 password hashing (100,000 rounds) mitigating rainbow-table and brute-force vectors.
+### 1. 🧠 Dual-Core AI Pipeline
+* **Computer Vision (`YOLOv8n` + OpenCV):** Deep learning inference optimized for zero-defect quality inspection. Detects objects, anomalies, and structural defects with granular confidence scoring.
+* **NLP & Automated Audit Logic:** Synthesizes inspector field notes and computer vision findings into an executive audit report in Arabic with automated risk classification (`CRITICAL`, `HIGH`, `MEDIUM`, `NORMAL`).
 
-Decoupled Architecture: Stateless API backend ready for reverse-proxy integration (NGINX/Traefik) and automated CI/CD deployment pipelines.
+### 2. 🛡️ Security & DevSecOps Hardening
+* **Input Sanitization & Buffer Defense:** Strict file type validation (`.jpg`, `.png`, `.webp`) and buffer length restrictions (10 MB threshold) preventing denial-of-service (DoS) and binary payload injection.
+* **Cryptographic Protection:** Salted PBKDF2-HMAC-SHA256 password hashing (100,000 rounds) mitigating rainbow-table and brute-force vectors.
+* **Decoupled Architecture:** Stateless API backend ready for reverse-proxy integration (NGINX/Traefik) and automated CI/CD deployment pipelines.
 
-3. ☁️ Cloud & Container Infrastructure
-Containerized Deployment: Multi-layer Dockerfile running on Debian slim with native system graphics libraries (libgl1, libxcb1, libglib2.0).
+### 3. ☁️ Cloud & Container Infrastructure
+* **Containerized Deployment:** Multi-layer `Dockerfile` running on Debian slim with native system graphics libraries (`libgl1`, `libxcb1`, `libglib2.0`).
+* **Environment Isolation:** Zero reliance on host-level Python runtimes; reproducible across any Linux Cloud instance (AWS EC2, GCP Compute, Azure VM).
 
-Environment Isolation: Zero reliance on host-level Python runtimes; reproducible across any Linux Cloud instance (AWS EC2, GCP Compute, Azure VM).
+---
 
-📂 Project Structure
-Bash
+## 📂 Project Structure
 
+```bash
 secure_inspection_platform/
 ├── app/
 │   ├── templates/
@@ -76,30 +87,51 @@ secure_inspection_platform/
 ├── Dockerfile                  # Production container definition file
 ├── requirements.txt            # System dependencies
 └── README.md                   # Enterprise documentation
-🚀 Quickstart & Deployment
-Prerequisites
-Docker Engine installed on Linux / macOS / Windows with WSL2.
+```
 
-1. Clone & Navigate
-Bash
+---
 
-git clone [https://github.com/Anas-sami/0.git](https://github.com/Anas-sami/0.git)cd 0
-2. Build & Launch via Docker
-Bash
+## 🚀 Quickstart & Deployment
 
+### Prerequisites
+* Docker Engine installed on Linux / macOS / Windows with WSL2.
+
+### 1. Clone & Navigate
+```bash
+git clone [https://github.com/Anas-sami/SecureAI-Inspection-Platform.git](https://github.com/Anas-sami/SecureAI-Inspection-Platform.git)
+cd SecureAI-Inspection-Platform
+```
+
+### 2. Build & Launch via Docker
+```bash
 # Build the production container image
-docker build -t secure-ai-inspection:v1 .# Run container on isolated port 8000
+docker build -t secure-ai-inspection:v1 .
+
+# Run container on isolated port 8000
 docker run -d -p 8000:8000 --name inspection_service secure-ai-inspection:v1
-3. Verify System Health
-Executive Dashboard: http://localhost:8000
+```
 
-Swagger API Specs: http://localhost:8000/docs
+### 3. Verify System Health
+* **Executive Dashboard:** `http://localhost:8000`
+* **Swagger API Specs:** `http://localhost:8000/docs`
+* **Healthcheck Probe:** `http://localhost:8000/health`
 
-Healthcheck Probe: http://localhost:8000/health
+---
 
-📊 API Specification Reference
-MethodEndpointDescriptionSecurity / ScopeGET/Serves the Modern Dark Executive UIPublicGET/healthSystem health check & container statusPublicPOST/usersRegisters a new user with PBKDF2 hashingSanitized InputPOST/inspections/uploadMultipart upload for YOLOv8 & NLP processingFile-Checked & ValidatedGET/inspectionsQueries historic inspection recordsAudit Database
-👨‍💻 Author & Engineering
-Architected and engineered by Anas Sami Al-Harthi (@Anas-sami).
+## 📊 API Specification Reference
 
-Designed with a focus on Cloud Infrastructure, Computer Vision integration, and DevSecOps engineering for scalable industrial quality assurance and automated compliance pipelines.
+| Method | Endpoint | Description | Security / Scope |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/` | Serves the Modern Dark Executive UI | Public |
+| `GET` | `/health` | System health check & container status | Public |
+| `POST` | `/users` | Registers a new user with PBKDF2 hashing | Sanitized Input |
+| `POST` | `/inspections/upload` | Multipart upload for YOLOv8 & NLP processing | File-Checked & Validated |
+| `GET` | `/inspections` | Queries historic inspection records | Audit Database |
+
+---
+
+## 👨‍💻 Author & Engineering
+
+Architected and engineered by **Anas Sami Al-Harthi** ([@Anas-sami](https://github.com/Anas-sami)).
+
+Designed with a focus on **Cloud Infrastructure, Computer Vision integration, and DevSecOps engineering** for scalable industrial quality assurance and automated compliance pipelines.
